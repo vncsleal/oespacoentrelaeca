@@ -1,15 +1,15 @@
-import { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { Metadata, ResolvingMetadata } from 'next';
+import { notFound } from 'next/navigation';
 
-import { SliceZone } from "@prismicio/react";
-import * as prismic from "@prismicio/client";
+import { SliceZone } from '@prismicio/react';
+import * as prismic from '@prismicio/client';
 
-import { createClient } from "@/prismicio";
-import { components } from "@/slices";
-import { PrismicNextImage } from "@prismicio/next";
-import { PostCard } from "@/components/PostCard";
-import { RichText } from "@/components/RichText";
-import { Navigation } from "@/components/Navigation";
+import { createClient } from '@/prismicio';
+import { components } from '@/slices';
+import { PrismicNextImage } from '@prismicio/next';
+import { PostCard } from '@/components/PostCard';
+import { RichText } from '@/components/RichText';
+import { Navigation } from '@/components/Navigation';
 
 // Define the structure of the author's data
 type AuthorDocumentData = {
@@ -20,24 +20,21 @@ type AuthorDocumentData = {
 };
 
 // Define the type for the author field in the blog post
-type AuthorField = prismic.FilledContentRelationshipField<"author", string> & {
+type AuthorField = prismic.FilledContentRelationshipField<'author', string> & {
   data: AuthorDocumentData;
 };
-
-interface BlogPostPageProps {
-  params: { uid: string };
-}
 
 /**
  * This page renders a Prismic Document dynamically based on the URL.
  */
 
-export async function generateMetadata({
-  params,
-}: BlogPostPageProps): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: { params: { uid: string } },
+  parent?: ResolvingMetadata
+): Promise<Metadata> {
   const client = createClient();
   const page = await client
-    .getByUID("blog_post", params.uid)
+    .getByUID('blog_post', params.uid)
     .catch(() => notFound());
 
   return {
@@ -47,19 +44,19 @@ export async function generateMetadata({
       title: page.data.meta_title || undefined,
       images: [
         {
-          url: page.data.meta_image.url || "",
+          url: page.data.meta_image.url || '',
         },
       ],
     },
   };
 }
 
-export default async function Page({ params }: BlogPostPageProps) {
+export default async function Page({ params }: { params: { uid: string } }) {
   const client = createClient();
 
   // Fetch the current blog post page using the UID from params
   const page = await client
-    .getByUID("blog_post", params.uid, {
+    .getByUID('blog_post', params.uid, {
       graphQuery: `
         {
           blog_post {
@@ -84,11 +81,11 @@ export default async function Page({ params }: BlogPostPageProps) {
     .catch(() => notFound());
 
   // Fetch other posts for the "Recommended Posts" section
-  const posts = await client.getAllByType("blog_post", {
-    predicates: [prismic.filter.not("my.blog_post.uid", params.uid)],
+  const posts = await client.getAllByType('blog_post', {
+    predicates: [prismic.filter.not('my.blog_post.uid', params.uid)],
     orderings: [
-      { field: "my.blog_post.publication_date", direction: "desc" },
-      { field: "document.first_publication_date", direction: "desc" },
+      { field: 'my.blog_post.publication_date', direction: 'desc' },
+      { field: 'document.first_publication_date', direction: 'desc' },
     ],
     limit: 2,
     graphQuery: `
@@ -146,10 +143,10 @@ export default async function Page({ params }: BlogPostPageProps) {
 
           {/* Publication Date */}
           <p className="text-xs text-neutral-500 text-center">
-            {new Date(publication_date || "").toLocaleDateString("en-US", {
-              month: "short",
-              day: "numeric",
-              year: "numeric",
+            {new Date(publication_date || '').toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric',
             })}
           </p>
 
@@ -213,7 +210,7 @@ export async function generateStaticParams(): Promise<{ uid: string }[]> {
   const client = createClient();
 
   // Query all Documents from the API
-  const pages = await client.getAllByType("blog_post");
+  const pages = await client.getAllByType('blog_post');
 
   // Return the params for dynamic routes
   return pages.map((page) => ({ uid: page.uid }));
