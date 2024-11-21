@@ -29,12 +29,14 @@ type AuthorField = prismic.FilledContentRelationshipField<'author', string> & {
  */
 
 export async function generateMetadata(
-  { params }: { params: { uid: string } },
+  params: { params: Promise<{ uid: string }> },
   parent?: ResolvingMetadata
 ): Promise<Metadata> {
+  const { uid } = await params.params;
+
   const client = createClient();
   const page = await client
-    .getByUID('blog_post', params.uid)
+    .getByUID('blog_post', uid)
     .catch(() => notFound());
 
   return {
@@ -51,12 +53,16 @@ export async function generateMetadata(
   };
 }
 
-export default async function Page({ params }: { params: { uid: string } }) {
+export default async function Page(
+  params: { params: Promise<{ uid: string }> }
+) {
+  const { uid } = await params.params;
+
   const client = createClient();
 
   // Fetch the current blog post page using the UID from params
   const page = await client
-    .getByUID('blog_post', params.uid, {
+    .getByUID('blog_post', uid, {
       graphQuery: `
         {
           blog_post {
@@ -82,7 +88,7 @@ export default async function Page({ params }: { params: { uid: string } }) {
 
   // Fetch other posts for the "Recommended Posts" section
   const posts = await client.getAllByType('blog_post', {
-    predicates: [prismic.filter.not('my.blog_post.uid', params.uid)],
+    predicates: [prismic.filter.not('my.blog_post.uid', uid)],
     orderings: [
       { field: 'my.blog_post.publication_date', direction: 'desc' },
       { field: 'document.first_publication_date', direction: 'desc' },
