@@ -1,4 +1,4 @@
-import { Metadata, ResolvingMetadata } from 'next';
+import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { SliceZone } from '@prismicio/react';
@@ -30,7 +30,6 @@ type AuthorField = prismic.FilledContentRelationshipField<'author', string> & {
 
 export async function generateMetadata(
   params: { params: Promise<{ uid: string }> },
-  parent?: ResolvingMetadata
 ): Promise<Metadata> {
   const { uid } = await params.params;
 
