@@ -8,7 +8,7 @@ type RichTextProps = SliceComponentProps<Content.RichTextSlice>;
 
 export default function RichTextSlice({ slice }: RichTextProps) {
   return (
-    <section className="flex flex-col gap-2">
+    <section className="flex flex-col md:max-w-screen-sm items-center gap-2">
       <RichText field={slice.primary.content} />
     </section>
   );
