@@ -2,9 +2,9 @@
 import './globals.css';
 import { PrismicPreview } from '@prismicio/next';
 import { repositoryName } from '@/prismicio';
-import Footer from '@/components/footer';
 import DarkModeToggle from '@/components/DarkModeToggle';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
+import Footer from '@/components/Footer';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
