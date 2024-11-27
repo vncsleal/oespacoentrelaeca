@@ -74,6 +74,7 @@ export default async function Index() {
     <>
       
       <Navigation client={client} />
+      
 
       <SliceZone slices={home.data.slices} components={components} />
 

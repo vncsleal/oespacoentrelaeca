@@ -19,15 +19,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
 
       <body className="font-sans text-neutral-900 bg-white dark:bg-neutral-900 dark:text-neutral-100">
-        {/* Removed max-w-6xl to allow full width */}
+       
         <DarkModeToggle />
         
         <div className="mx-auto">
-          {children}
+          <main>{children}</main>
           <PrismicPreview repositoryName={repositoryName} />
         </div>
+
         <ScrollToTopButton />
-        <Footer/>
+        <Footer />
       </body>
     </html>
   );
