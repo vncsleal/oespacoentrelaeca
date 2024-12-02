@@ -1,7 +1,8 @@
 // src/app/page.tsx
 import { Metadata } from "next";
-import { PrismicLink, SliceZone } from "@prismicio/react";
+import { SliceZone } from "@prismicio/react";
 import * as prismic from "@prismicio/client";
+
 
 import { createClient } from "@/prismicio";
 import { components } from "@/slices";

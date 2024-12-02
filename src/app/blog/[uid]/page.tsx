@@ -199,7 +199,7 @@ export default async function Page(
 
       {/* Recommended Posts Section */}
       <section className="px-2 py-4">
-        <h2 className="font-bold text-2xl mb-4">Recommended Posts</h2>
+        <h2 className="font-bold text-2xl mb-4">Posts Recomendados</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {posts.map((post) => (
             <PostCard key={post.id} post={post} />
